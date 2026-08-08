@@ -359,11 +359,11 @@
     function decreaseStat(stat) {
       // Only stats currently at 5 can be reduced.
       // Reducing 5 -> 4 gives one point.
-      if (stats[stat] !== 5) {
+      if (stats[stat] <= 4) {
         return;
       }
 
-      stats[stat] = 4;
+      stats[stat]--;
       points++;
 
       renderStats();
