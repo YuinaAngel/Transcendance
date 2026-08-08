@@ -1,1 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character Creator</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #121218;
+      color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .creator {
+      width: 100%;
+      max-width: 850px;
+      background: #1d1d26;
+      border: 1px solid #353542;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 32px;
+    }
+
+    .top-section {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .pfp-section {
+      text-align: center;
+    }
+
+    .pfp {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #30303c;
+      border: 3px solid #555568;
+      display: block;
+      margin: 0 auto 15px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      font-size: 12px;
+    }
+
+    label {
+      display: block;
+      color: #aaa;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #454553;
+      background: #121218;
+      color: white;
+      font-size: 17px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #8b6cff;
+    }
+
+    .level {
+      margin-top: 20px;
+      background: #292936;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+
+    .points {
+      text-align: center;
+      background: #30284a;
+      border: 1px solid #614da0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 25px;
+    }
+
+    .points strong {
+      font-size: 25px;
+      color: #b9a5ff;
+    }
+
+    .stats {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stat {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      align-items: center;
+      gap: 12px;
+      background: #262630;
+      padding: 14px 16px;
+      border-radius: 10px;
+    }
+
+    .stat-name {
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .stat-value {
+      width: 35px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    button {
+      border: none;
+      border-radius: 7px;
+      padding: 8px 13px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+
+    .plus {
+      background: #4c8d5b;
+    }
+
+    .plus:hover {
+      background: #5ca96b;
+    }
+
+    .minus {
+      background: #9a4e4e;
+    }
+
+    .minus:hover {
+      background: #b45b5b;
+    }
+
+    button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .rules {
+      margin-top: 25px;
+      padding: 15px;
+      background: #17171e;
+      border-radius: 10px;
+      color: #aaa;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .create-button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 16px;
+      background: #7657d9;
+      font-size: 18px;
+    }
+
+    .create-button:hover {
+      background: #8969ed;
+    }
+
+    #result {
+      display: none;
+      margin-top: 25px;
+      padding: 20px;
+      background: #202a22;
+      border: 1px solid #416848;
+      border-radius: 12px;
+    }
+
+    #result pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #bfe8c5;
+    }
+
+    @media (max-width: 600px) {
+      .top-section {
+        grid-template-columns: 1fr;
+      }
+
+      .stat {
+        grid-template-columns: 1fr auto auto auto;
+      }
+
+      .creator {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="creator">
+
+    <h1>Character Creator</h1>
+
+    <section class="top-section">
+
+      <div class="pfp-section">
+        <img
+          id="pfpPreview"
+          class="pfp"
+          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect width='150' height='150' fill='%2330303c'/%3E%3Ctext x='75' y='82' text-anchor='middle' fill='%23888899' font-size='16'%3EPFP%3C/text%3E%3C/svg%3E"
+          alt="Character portrait"
+        >
+
+        <input
+          type="file"
+          id="pfpInput"
+          accept="image/*"
+        >
+      </div>
+
+      <div>
+        <label for="characterName">Character Name</label>
+        <input
+          type="text"
+          id="characterName"
+          placeholder="Enter character name..."
+          maxlength="30"
+        >
+
+        <div class="level">
+          Level: <strong>1</strong>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="points">
+      Points Available:
+      <strong id="points">3</strong>
+    </div>
+
+    <section class="stats" id="stats"></section>
+
+    <div class="rules">
+      <strong>How it works</strong><br>
+      Every stat starts at 5. You have 3 points to spend.
+      Click <strong>+</strong> to spend a point and increase a stat.
+      You may also reduce a stat from 5 → 4 with <strong>−</strong>,
+      which gives you 1 additional point to spend.
+      Stats cannot go below 4.
+    </div>
+
+    <button class="create-button" onclick="createCharacter()">
+      Create Character
+    </button>
+
+    <div id="result">
+      <strong>Character Created!</strong>
+      <pre id="characterData"></pre>
+    </div>
+
+  </main>
+
+  <script>
+    const statNames = [
+      "Might",
+      "Vitality",
+      "Agility",
+      "Intellect",
+      "Rumination",
+      "Charisma"
+    ];
+
+    const stats = {};
+
+    // All stats start at 5.
+    statNames.forEach(stat => {
+      stats[stat] = 5;
+    });
+
+    // Player starts with 3 points.
+    let points = 3;
+
+    const statsContainer = document.getElementById("stats");
+    const pointsDisplay = document.getElementById("points");
+
+    function renderStats() {
+      statsContainer.innerHTML = "";
+
+      statNames.forEach(stat => {
+        const statDiv = document.createElement("div");
+        statDiv.className = "stat";
+
+        statDiv.innerHTML = `
+          <div class="stat-name">${stat}</div>
+
+          <div class="stat-value" id="value-${stat}">
+            ${stats[stat]}
+          </div>
+
+          <button
+            class="minus"
+            onclick="decreaseStat('${stat}')"
+            ${stats[stat] <= 4 ? "disabled" : ""}
+          >
+            −
+          </button>
+
+          <button
+            class="plus"
+            onclick="increaseStat('${stat}')"
+            ${points <= 0 ? "disabled" : ""}
+          >
+            +
+          </button>
+        `;
+
+        statsContainer.appendChild(statDiv);
+      });
+
+      pointsDisplay.textContent = points;
+    }
+
+    function increaseStat(stat) {
+      if (points <= 0) {
+        return;
+      }
+
+      stats[stat]++;
+      points--;
+
+      renderStats();
+    }
+
+    function decreaseStat(stat) {
+      // Only stats currently at 5 can be reduced.
+      // Reducing 5 -> 4 gives one point.
+      if (stats[stat] !== 5) {
+        return;
+      }
+
+      stats[stat] = 4;
+      points++;
+
+      renderStats();
+    }
+
+    // PFP upload and preview.
+    document
+      .getElementById("pfpInput")
+      .addEventListener("change", function(event) {
+
+        const file = event.target.files[0];
+
+        if (!file) {
+          return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+          alert("Please upload an image.");
+          return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          document.getElementById("pfpPreview").src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+      });
+
+    function createCharacter() {
+      const name =
+        document.getElementById("characterName").value.trim();
+
+      if (!name) {
+        alert("Please enter a character name.");
+        return;
+      }
+
+      const character = {
+        name: name,
+        level: 1,
+        stats: {
+          might: stats.Might,
+          vitality: stats.Vitality,
+          agility: stats.Agility,
+          intellect: stats.Intellect,
+          rumination: stats.Rumination,
+          charisma: stats.Charisma
+        }
+      };
+
+      document.getElementById("characterData").textContent =
+        JSON.stringify(character, null, 2);
+
+      document.getElementById("result").style.display = "block";
+    }
+
+    // Initial display.
+    renderStats();
+  </script>
+
+</body>
+</html>
